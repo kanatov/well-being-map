@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/styles.css?v=1.0">
 </head>
 <body>
-  <!-- Intro -->
+
+  <!-- UI -->
   <div id="main">
     <div id="categories">
 
@@ -19,7 +20,7 @@
       <form id="addCategoryForm">
         <label for="name">New category:</label>
         <input type="text" name="name" required >
-        <input type="submit" value="Add">
+        <input type="submit" value="Add" class="button">
       </form>
     </div>
   </div>
@@ -30,12 +31,17 @@
     </div>
   </div>
 
+  <!-- Elements -->
+  <script src="js/elements/name.js"></script>
+  <script src="js/elements/category.js"></script>
+
+  <!-- Inputs -->
   <script src="js/inputs/ui.js"></script>
 
-  <script src="js/category.js"></script>
-
+  <!-- Logic -->
   <script src="js/main.js"></script>
 
+  <!-- Init -->
   <script>
     'use strict';
 

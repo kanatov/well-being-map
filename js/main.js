@@ -22,10 +22,27 @@ class App {
 
 	/* Add category */
 	addCategory(_name) {
+		/* If categories not yet created */
 		if (!this.categories) {
 			this.categories = [];
 		}
-		this.categories.push(_name)
+
+		/* If the name is unique */
+		var unique = true;
+		for (var category of this.categories) {
+			if (category.name == _name) {
+				unique = false;
+				break;
+			}
+		}
+		if (unique) {
+			/* Unique name */
+			const category = new Category(_name);
+			this.categories.push(category);
+		} else {
+			/* Existing name */
+			console.log('"' + _name + '" already exist');
+		}
 		console.log(this.categories);
 	}
 }
