@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Well being map</title>
+  <meta name="description" content="Well being map">
+  <meta name="keywords" content="well being, priorities">
+  <meta name="author" content="Ilya Kanatov">
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
+<body>
+  <!-- Intro -->
+  <div id="main">
+    <div id="categories">
+
+    </div>
+    <div id="addCategory">
+      <form id="addCategoryForm">
+        <label for="name">New category:</label>
+        <input type="text" name="name" required >
+        <input type="submit" value="Add">
+      </form>
+    </div>
+  </div>
+
+  <div id="templates">
+    <div id="template-category">
+      <span class="category-title">Title</span>
+    </div>
+  </div>
+
+  <script src="js/inputs/ui.js"></script>
+
+  <script src="js/category.js"></script>
+
+  <script src="js/main.js"></script>
+
+  <script>
+    'use strict';
+
+    var app;
+    window.onload = (_e) => {
+
+      /* Dom Elements */
+      const dom = {
+        /* Root containers */
+        main: 'main',
+        categories: 'categories',
+
+        /* Input form */
+        addCategoryForm: 'addCategoryForm',
+
+        /* Templates */
+        templateCategory: 'templateCategory',
+      };
+
+      /* Init App */
+    	app = new App(dom);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/*
+#676a6f dk grey
+#afb6c0 lt gray
+#f6e8db lt yellow
+#dfca9f yellow
+#b4976d dk yellow
+*/
+/*
+#ffd586 yellow
+#c4d3da blue
+#d4d8de grey
+#e9e9e9 lt yellow
+#fdfdfd almos white
+*/
+html, body, canvas {
+  width:100%;
+  height: 100%;
+}
+html, body, canvas, h1, h2,h3,h4,h5,h6,p,div,a,input,address,time {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+}
+body {
+  color: black;
+  font-family: monospace;
+  font-size: 1em;
+  background-color: #d4d8de;
+}
+#start {
+  font-size: 1em;
+  font-family: "Arial", sans-serif;
+}
+#start {
+  margin: 4em auto 4em;
+  width: 25em;
+  color: #AAA;
+}
+h1, h3 {
+  color: white;
+  font-weight: bold;
+}
+h1 {
+  font-size: 2em;
+}
+h3 {
+  margin-bottom: .5em;
+}
+h6, address, time {
+  display: inline;
+}
+
+#templates {
+  visibility: hidden;
+}
