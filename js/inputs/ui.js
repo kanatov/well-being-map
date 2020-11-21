@@ -6,7 +6,7 @@ class UI {
 
 		/* Listen 'New category' UI form */
 		this.addListener(
-			this.methods.getDom().addCategoryForm,
+			this.methods.getParameters().addCategoryForm,
 			'submit',
 			this.processNewCategoryForm.bind(this)
 		);
