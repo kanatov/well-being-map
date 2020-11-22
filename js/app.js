@@ -5,32 +5,23 @@ class App extends Global {
 		super(_strings);
 
 		/* Init Storage */
-		this.storage = new Storage(this.strings);
+		const storageGlobal = {
+			render: (_state) => { this.ui.render(_state); }
+		};
+		this.storage = new Storage(this.strings, storageGlobal);
 
 		/* Init UI */
-		this.ui = new UI(this.strings);
-
-		/* Update global */
-		const uiGlobalUpdate = {
-			addCategory: this.addCategory.bind(this),
-			state: this.storage.state
+		const uiGlobal = {
+			validateCategory: (_name) => { this.validateCategory(_name); }
 		};
-		this.ui.updateGlobal(uiGlobalUpdate);
-
-		const storageGlobalUpdate = {
-			render: this.ui.render.bind(this)
-		};
-		this.storage.updateGlobal(storageGlobalUpdate);
-
-		/* Init */
-		this.ui.init();
+		this.ui = new UI(this.strings, uiGlobal);
 
 		/* Render */
-		this.ui.render();
+		this.ui.render(this.storage.state);
 	}
 
 	/* Add category */
-	addCategory(_name) {
+	validateCategory(_name) {
 		/* If the name is unique */
 		var unique = true;
 		for (var category of this.storage.state.categories) {
@@ -39,8 +30,7 @@ class App extends Global {
 				break;
 			}
 		}
-		// if (unique) {
-		if (true) {
+		if (unique) {
 			/* Unique name */
 			const strings = {
 				id: (new Date()).getTime(),

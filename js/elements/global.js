@@ -1,13 +1,17 @@
 'use strict';
 
 class Global {
-	constructor(_strings) {
+	constructor(_strings, _global) {
 		this._strings = _strings;
-		this._global = { source: 0 };
+		this._global = {};
+
+		this.updateGlobal(_global);
 	}
 	updateGlobal(_global) {
-		for (var [key, value] of Object.entries(_global)) {
-			this._global[key] = _global[key];
+		if (_global) {
+			for (var [key, value] of Object.entries(_global)) {
+				this._global[key] = _global[key];
+			}
 		}
 	}
 	get strings() {

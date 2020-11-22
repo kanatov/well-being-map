@@ -1,8 +1,8 @@
 'use strict';
 
 class Storage extends Global {
-	constructor(_global) {
-		super(_global);
+	constructor(_strings, _global) {
+		super(_strings, _global);
 
 		/* Init storage */
 		this.storage = null;
@@ -82,7 +82,7 @@ class Storage extends Global {
 			this.storage.setItem(this.keyCategories, JSON.stringify(categories));
 
 			/* Refresh page */
-			this.global.render();
+			this.global.render(this.state);
 		}
 	}
 }

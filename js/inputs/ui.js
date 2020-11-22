@@ -1,21 +1,20 @@
 'use strict';
 
 class UI extends Global {
-	constructor(_global) {
-		super(_global);
+	constructor(_strings, _global) {
+		super(_strings, _global);
+
+		const element = document.getElementById(this.strings.addCategoryForm);
+		element.addEventListener('submit', (e) => { this.processNewCategoryForm(e); });
 	}
 
 	init() {
 		/* Listen 'New category' UI form */
-		/*
 		this.addListener(
 			this.strings.addCategoryForm,
 			'submit',
 			this.processNewCategoryForm.bind(this)
 		);
-		*/
-		const element = document.getElementById(this.strings.addCategoryForm);
-		element.addEventListener('submit', (e) => { this.processNewCategoryForm(e); });
 	}
 
 	/* Process 'New category' form response */
@@ -23,9 +22,9 @@ class UI extends Global {
 		e.preventDefault();
 
 		const formData = new FormData(e.target);
-		for (var [key, value] of formData.entries()) {
-			/* closure fuckup */
-			this.global.addCategory(value);
+
+		for (var [key, name] of formData.entries()) {
+			this.global.validateCategory(name);
 		}
 	}
 
@@ -46,13 +45,13 @@ class UI extends Global {
 		title.innerHTML = _category.name;
 		return template;
 	}
-	render() {
+	render(_state) {
 		/* Clean categories */
 		const categoriesContainerId = this.strings.categories;
 		const categoriesContainer = document.getElementById(categoriesContainerId);
 		categoriesContainer.innerHTML = '';
 
-		for (var category of this.global.state.categories) {
+		for (var category of _state.categories) {
 			const domCategory = this.getDomCategory(category);
 			categoriesContainer.appendChild(domCategory);
 		}
