@@ -3,8 +3,7 @@
 class App extends Global {
 	constructor(_strings) {
 		super(_strings);
-		/* Init
-		 */
+
 		/* Init Storage */
 		const storageGlobal = {
 			render: (_state) => { this.ui.render(_state); }
@@ -13,7 +12,8 @@ class App extends Global {
 
 		/* Init UI */
 		const uiGlobal = {
-			validateCategory: (_name) => { this.validateCategory(_name); }
+			validateCategory: (_name) => { this.validateCategory(_name); },
+			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); }
 		};
 		this.ui = new UI(this.strings, uiGlobal);
 
@@ -21,7 +21,10 @@ class App extends Global {
 		this.ui.render(this.storage.state);
 	}
 
-	/* Add category */
+	/* ---------------------------------------------------------------------------
+	 * Validation tools
+	 */
+	/* Validate new category */
 	validateCategory(_name) {
 		/* Format the string */
 		const name = _name.toLowerCase();
@@ -36,14 +39,29 @@ class App extends Global {
 		}
 		if (unique) {
 			/* Unique name */
-			const parameters = {
-				id: (new Date()).getTime(),
-				name: name
-			};
+			const parameters = this.storage.emptyCategory;
+			parameters.name = name;
 			this.storage.addCategory(parameters);
 		} else {
 			/* Existing name */
 			console.log('"' + name + '" already exist');
 		}
+	}
+
+	/* Validate new task */
+	validateTask(_formDataObject) {
+		const newTask = this.storage.emptyTask;
+		const newTaskName = _formDataObject.name.toLowerCase();
+		newTask.name = newTaskName;
+
+		for (var [key, value] of Object.entries(_formDataObject)) {
+			if (key != 'name') {
+				if (value != 0) {
+					newTask.categories[key] = value;
+				}
+			}
+		}
+
+		this.storage.addTask(newTask);
 	}
 }

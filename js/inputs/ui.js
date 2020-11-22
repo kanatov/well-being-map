@@ -4,34 +4,57 @@ class UI extends Global {
 	constructor(_strings, _global) {
 		super(_strings, _global);
 
-		const element = document.getElementById(this.strings.addCategoryForm);
-		element.addEventListener('submit', (e) => { this.processNewCategoryForm(e); });
+		/* Listen to 'New category' form submit */
+		this.addListener(
+			this.strings.addCategoryForm,
+			'submit',
+			(e) => { this.processCategoryForm(e); }
+		);
+
+		/* Listen to 'New task' form submit */
+		this.addListener(
+			this.strings.addTaskForm,
+			'submit',
+			(e) => { this.processTaskForm(e); }
+		);
 	}
 
-	/* Listen 'New category' UI form */
-	// this.addListener(
-	// 	this.strings.addCategoryForm,
-	// 	'submit',
-	// 	this.processNewCategoryForm.bind(this)
-	// );
+	/* ---------------------------------------------------------------------------
+	 * Events
+	 */
 
-	/* Process 'New category' form response */
-	processNewCategoryForm(e) {
-		e.preventDefault();
-
-		const formData = new FormData(e.target);
-
-		for (var [key, name] of formData.entries()) {
-			this.global.validateCategory(name);
-			e.target.reset();
-		}
-	}
-
-	/* Add a custom listener */
+	/* Add cutom event listener tool */
 	addListener(_id, _event, _method) {
 		const element = document.getElementById(_id);
 		element.addEventListener(_event, _method);
 	}
+
+	/* Process 'New category' form submit */
+	processCategoryForm(e) {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		for (var [key, name] of formData.entries()) {
+			this.global.validateCategory(name);
+		}
+
+		e.target.reset();
+	}
+
+	/* Process 'New task' form submit */
+	processTaskForm(e) {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const formDataObject = {};
+		for (var [key, value] of formData.entries()) {
+			formDataObject[key] = value
+		}
+		this.global.validateTask(formDataObject);
+
+		e.target.reset();
+	}
+
 
 	/* ---------------------------------------------------------------------------
 	 * Dom tools
@@ -45,7 +68,7 @@ class UI extends Global {
 	getDomCategory(_category, _categoryID) {
 		const templateId = this.strings.templateCategory;
 		const template = this.getCloneById(templateId);
-		template.setAttribute("id", 'category-' + _categoryID);
+		template.setAttribute("id", _categoryID);
 
 		/* Title */
 		const titleDom = template.querySelector('.' + this.strings.templateCategoryTitle);
@@ -61,12 +84,12 @@ class UI extends Global {
 
 		/* Label */
 		const labelDom = template.querySelector('label');
-		labelDom.setAttribute("for", 'category-' + _categoryID);
+		labelDom.setAttribute("for", _categoryID);
 		labelDom.innerHTML = _category.name;
 
 		/* Input */
 		const inputDom = template.querySelector('input');
-		inputDom.setAttribute("name", 'category-' + _categoryID);
+		inputDom.setAttribute("name", _categoryID);
 
 		return template;
 	}
@@ -93,6 +116,9 @@ class UI extends Global {
 			const dom = this.getDomCategory(category, category.id);
 			emptyCategories.appendChild(dom);
 		}
+		if (!emptyCategories.childNodes.length) {
+			emptyCategories.innerHTML = '<b>No categories</b>';
+		}
 
 		/* Clean 'New task' form categories */
 		const emptyTaskFromCategories = this.cleanInnerHTML(this.strings.addTaskForm, this.strings.addTaskFormCategories);
@@ -101,6 +127,9 @@ class UI extends Global {
 		for (var category of _state.categories) {
 			const dom = this.getDomAddTaskCategory(category, category.id);
 			emptyTaskFromCategories.appendChild(dom);
+		}
+		if (!emptyTaskFromCategories.childNodes.length) {
+			emptyTaskFromCategories.innerHTML = '<b>No categories</b>';
 		}
 
 	}

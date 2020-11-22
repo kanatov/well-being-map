@@ -17,9 +17,9 @@
     Categories:
     <div id="categories" class="section"></div>
     <!-- Add category -->
-    <div id="addCategory" class="section">
+    <div id="addCategory" class="section form">
       <form id="addCategoryForm">
-        <label for="name">New category:</label>
+        <label for="name">New category name:</label>
         <input type="text" name="name" required >
         <input type="submit" value="Add" class="button">
       </form>
@@ -28,12 +28,12 @@
     <!-- Tasks -->
     <div id="tasks" class="section"></div>
     <!-- Add task -->
-    <div id="addTask" class="section">
+    <div id="addTask" class="section form">
       <form id="addTaskForm">
-        <label for="name">Task name:</label>
-        <input type="text" name="name" required >
+        <label for="name" >New task name:</label>
+        <input type="text" name="name" id="new-task-name" required >
         <div class="categories"></div>
-        <input type="submit" value="New task" class="button">
+        <input type="submit" value="Add" class="button">
       </form>
     </div>
   </div>
@@ -68,6 +68,7 @@
   <script src="js/elements/global.js"></script>
   <script src="js/elements/name.js"></script>
   <script src="js/elements/category.js"></script>
+  <script src="js/elements/task.js"></script>
 
   <!-- Inputs -->
   <script src="js/inputs/storage.js"></script>
@@ -88,6 +89,7 @@
         /* Storage name */
         storageName: 'app-storage',
         storageCategories: 'categories',
+        storageTasks: 'tasks',
 
         /* Dom Elements */
         /* Root containers */
