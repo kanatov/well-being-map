@@ -1,66 +1,55 @@
 'use strict';
 
-class App {
-	constructor(_parameters) {
-		this.parameters = _parameters;
+class App extends Global {
+	constructor(_strings) {
+		super(_strings);
 
 		/* Init Storage */
-		const storageMethods = {
-			getParameters: this.getParameters.bind(this),
-			render: this.render.bind(this)
-		};
-		this.storage = new Storage(storageMethods);
+		this.storage = new Storage(this.strings);
 
 		/* Init UI */
-		const uiMethods = {
-			getParameters: this.getParameters.bind(this),
-			addCategory: this.addCategory.bind(this)
+		this.ui = new UI(this.strings);
+
+		/* Update global */
+		const uiGlobalUpdate = {
+			addCategory: this.addCategory.bind(this),
+			state: this.storage.state
 		};
-		this.ui = new UI(uiMethods);
-	}
+		this.ui.updateGlobal(uiGlobalUpdate);
 
-	/* Methods
-	 */
+		const storageGlobalUpdate = {
+			render: this.ui.render.bind(this)
+		};
+		this.storage.updateGlobal(storageGlobalUpdate);
 
-	/* Read-Write state */
-	get state() {
-		return this.storage.state;
-	}
-	set state(_state) {
-		this.storage.state = _state;
-	}
+		/* Init */
+		this.ui.init();
 
-	/* Return dom elements list */
-	getParameters() {
-		return this.parameters;
+		/* Render */
+		this.ui.render();
 	}
 
 	/* Add category */
 	addCategory(_name) {
 		/* If the name is unique */
 		var unique = true;
-		for (var category of this.state.categories) {
+		for (var category of this.storage.state.categories) {
 			if (category._name == _name) {
 				unique = false;
 				break;
 			}
 		}
-		if (unique) {
+		// if (unique) {
+		if (true) {
 			/* Unique name */
-			const category = new Category(_name);
-
-			/* Update state */
-			const newState = this.state;
-			newState.categories.push(category);
-			this.state = newState;
-
+			const strings = {
+				id: (new Date()).getTime(),
+				name: _name
+			};
+			this.storage.addCategory(strings);
 		} else {
 			/* Existing name */
 			console.log('"' + _name + '" already exist');
 		}
-	}
-	render() {
-		console.log('Render');
-		console.log(this.state);
 	}
 }
