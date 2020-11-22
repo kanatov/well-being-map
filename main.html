@@ -13,22 +13,55 @@
 
   <!-- UI -->
   <div id="main">
-    <div id="categories">
-
-    </div>
-    <div id="addCategory">
+    <!-- Categories -->
+    Categories:
+    <div id="categories" class="section"></div>
+    <!-- Add category -->
+    <div id="addCategory" class="section">
       <form id="addCategoryForm">
         <label for="name">New category:</label>
         <input type="text" name="name" required >
         <input type="submit" value="Add" class="button">
       </form>
     </div>
+
+    <!-- Tasks -->
+    <div id="tasks" class="section"></div>
+    <!-- Add task -->
+    <div id="addTask" class="section">
+      <form id="addTaskForm">
+        <label for="name">Task name:</label>
+        <input type="text" name="name" required >
+        <div class="categories"></div>
+        <input type="submit" value="New task" class="button">
+      </form>
+    </div>
   </div>
 
+  <!-- Templates -->
   <div id="templates">
-    <div id="template-category">
-      <span class="category-title">Title</span>
+    <!-- Category template -->
+    <div id="template-category" class="template-category">
+      <span class="title">Title</span>
     </div>
+
+    <!-- Task template -->
+    <div id="template-task" class="template-task">
+      <span class="title">Title</span>
+      <div class="task-categories"></div>
+    </div>
+
+    <!-- Task: category template -->
+    <div id="template-task-category" class="task-category">
+      <span class="task-category-title">Category</span>
+      <a class="task-category-value" href="#">Value</a>
+    </div>
+    <!-- Task: 'Add task' form category template -->
+    <div id="template-add-task-category" class="add-task-category">
+      <label for="name">Category</label>
+      <input type="number" name="name" value="0">
+    </div>
+
   </div>
 
   <!-- Elements -->
@@ -61,11 +94,19 @@
         main: 'main',
         categories: 'categories',
 
-        /* Input form */
+        /* Add category form */
         addCategoryForm: 'addCategoryForm',
+
+        /* Add task form */
+        addTaskForm: 'addTaskForm',
+        addTaskFormCategories: 'categories',
+        addTaskFormCategory: 'template-add-task-category',
 
         /* Templates */
         templateCategory: 'template-category',
+        templateCategoryTitle: 'title',
+        templateTask: 'template-task',
+        templateTaskTitle: 'title'
       };
 
       /* Init App */

@@ -18,19 +18,23 @@ class Storage extends Global {
 		const name = storageName + '-' + categoriesName;
 		return name;
 	}
+
 	/* Generate empty state */
-	getEmptyState() {
+	get emptyState() {
 		const emptyState = {
 			categories: []
 		};
 		return emptyState;
 	}
-	getCategory(_strings) {
-		return new Category(_strings);
+
+	/* Create category class using parameters */
+	getCategory(_parameters) {
+		return new Category(_parameters);
 	}
+
 	/* Add new category */
-	addCategory(_strings) {
-		const category = this.getCategory(_strings);
+	addCategory(_parameters) {
+		const category = this.getCategory(_parameters);
 
 		/* Update state */
 		const newState = this.state;
@@ -38,6 +42,7 @@ class Storage extends Global {
 		this.state = newState;
 	}
 
+	/* Prepare array to saving */
 	getSerialisedArray(_classesArray) {
 		const array = [];
 
@@ -52,7 +57,7 @@ class Storage extends Global {
 	/* Return state */
 	get state() {
 		/* Make an empty state */
-		var state = this.getEmptyState();
+		var state = this.emptyState;
 
 		/* Try to load state */
 		if (this.storage) {

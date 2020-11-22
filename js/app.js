@@ -3,7 +3,8 @@
 class App extends Global {
 	constructor(_strings) {
 		super(_strings);
-
+		/* Init
+		 */
 		/* Init Storage */
 		const storageGlobal = {
 			render: (_state) => { this.ui.render(_state); }
@@ -22,24 +23,27 @@ class App extends Global {
 
 	/* Add category */
 	validateCategory(_name) {
+		/* Format the string */
+		const name = _name.toLowerCase();
+
 		/* If the name is unique */
 		var unique = true;
 		for (var category of this.storage.state.categories) {
-			if (category._name == _name) {
+			if (category.name == name) {
 				unique = false;
 				break;
 			}
 		}
 		if (unique) {
 			/* Unique name */
-			const strings = {
+			const parameters = {
 				id: (new Date()).getTime(),
-				name: _name
+				name: name
 			};
-			this.storage.addCategory(strings);
+			this.storage.addCategory(parameters);
 		} else {
 			/* Existing name */
-			console.log('"' + _name + '" already exist');
+			console.log('"' + name + '" already exist');
 		}
 	}
 }
