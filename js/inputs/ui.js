@@ -4,6 +4,13 @@ class UI extends Global {
 	constructor(_strings, _global) {
 		super(_strings, _global);
 
+		/* Reset */
+		this.addListener(
+			this.strings.reset,
+			'click',
+			() => { this.reset(); }
+		);
+
 		/* Listen to 'New category' form submit */
 		this.addListener(
 			this.strings.addCategoryForm,
@@ -22,6 +29,12 @@ class UI extends Global {
 	/* ---------------------------------------------------------------------------
 	 * Events
 	 */
+
+	/* Reset */
+	reset() {
+		localStorage.clear();
+		location.reload();
+	}
 
 	/* Add cutom event listener tool */
 	addListener(_id, _event, _method) {
@@ -145,7 +158,7 @@ class UI extends Global {
 			emptyCategories.appendChild(dom);
 		}
 		if (!emptyCategories.childNodes.length) {
-			emptyCategories.innerHTML = '<b>No categories yet, please addsome</b>';
+			emptyCategories.innerHTML = '<h2>No categories yet, please add some.</h2>';
 		}
 
 		/* Clean 'New task' form categories */
