@@ -59,41 +59,6 @@ class UI extends Global {
 	/* ---------------------------------------------------------------------------
 	 * Dom tools
 	 */
-	getCloneById(_id) {
-		const templateDom = document.getElementById(_id);
-		const cloneDom = templateDom.cloneNode(true);
-		return cloneDom;
-	}
-
-	getDomCategory(_category, _categoryID) {
-		const templateId = this.strings.templateCategory;
-		const template = this.getCloneById(templateId);
-		template.setAttribute("id", _categoryID);
-
-		/* Title */
-		const titleDom = template.querySelector('.' + this.strings.templateCategoryTitle);
-		titleDom.innerHTML = _category.name;
-
-		return template;
-	}
-
-	getDomAddTaskCategory(_category, _categoryID) {
-		const templateId = this.strings.addTaskFormCategory;
-		const template = this.getCloneById(templateId);
-		template.removeAttribute("id");
-
-		/* Label */
-		const labelDom = template.querySelector('label');
-		labelDom.setAttribute("for", _categoryID);
-		labelDom.innerHTML = _category.name;
-
-		/* Input */
-		const inputDom = template.querySelector('input');
-		inputDom.setAttribute("name", _categoryID);
-
-		return template;
-	}
-
 	cleanInnerHTML(_id, _class) {
 		var dom = document.getElementById(_id);
 		if (_class) {
@@ -102,6 +67,69 @@ class UI extends Global {
 		}
 		dom.innerHTML = '';
 		return dom;
+	}
+
+	getCloneById(_id) {
+		const templateDom = document.getElementById(_id);
+		const cloneDom = templateDom.cloneNode(true);
+		cloneDom.removeAttribute("id");
+		return cloneDom;
+	}
+
+	getDomCategory(_category) {
+		const templateId = this.strings.templateCategory;
+		const template = this.getCloneById(templateId);
+		template.setAttribute(this.strings.categoryID, _category.id);
+
+		/* Title */
+		const titleDom = template.querySelector('.' + this.strings.templateTitle);
+		titleDom.innerHTML = _category.name;
+
+		return template;
+	}
+
+	getDomTask(_task) {
+		const templateId = this.strings.templateTask;
+		const template = this.getCloneById(templateId);
+
+		/* Title */
+		const titleDom = template.querySelector('.' + this.strings.templateTitle);
+		titleDom.innerHTML = _task.name;
+		return template;
+	}
+
+	getDomAddTaskCategory(_category) {
+		const templateId = this.strings.templateAddTaskFormCategory;
+		const template = this.getCloneById(templateId);
+
+		/* Label */
+		const labelDom = template.querySelector('label');
+		labelDom.setAttribute("for", _category.id);
+		labelDom.innerHTML = _category.name;
+
+		/* Input */
+		const inputDom = template.querySelector('input');
+		inputDom.setAttribute("name", _category.id);
+
+		return template;
+	}
+
+	getDomTaskCategory(_category, _task) {
+		const templateId = this.strings.templateTaskCategory;
+		const template = this.getCloneById(templateId);
+		template.setAttribute(this.strings.categoryID, _category.id);
+
+		/* Title */
+		const titleDom = template.querySelector('.' + this.strings.templateTitle);
+		titleDom.innerHTML = _category.name;
+
+		/* Value */
+		const valueDom = template.querySelector('.' + this.strings.templateValue);
+		const taskCategoryValue = _task.categories[_category.id];
+		const value = taskCategoryValue ? taskCategoryValue : 0;
+		valueDom.innerHTML = value;
+
+		return template;
 	}
 
 	/* ---------------------------------------------------------------------------
@@ -121,20 +149,34 @@ class UI extends Global {
 		}
 
 		/* Clean 'New task' form categories */
-		const emptyTaskFromCategories = this.cleanInnerHTML(this.strings.addTaskForm, this.strings.addTaskFormCategories);
+		const emptyTaskFormCategories = this.cleanInnerHTML(
+			this.strings.addTaskForm,
+			this.strings.addTaskFormCategories
+		);
 
 		/* Render 'New task' form categories */
 		for (var category of _state.categories) {
-			const dom = this.getDomAddTaskCategory(category, category.id);
-			emptyTaskFromCategories.appendChild(dom);
+			const dom = this.getDomAddTaskCategory(category);
+			emptyTaskFormCategories.appendChild(dom);
 		}
-		if (!emptyTaskFromCategories.childNodes.length) {
-			emptyTaskFromCategories.innerHTML = 'No categories';
+		if (!emptyTaskFormCategories.childNodes.length) {
+			emptyTaskFormCategories.innerHTML = 'No categories';
 		}
+
+		/* Clean tasks */
+		const emptyTasks = this.cleanInnerHTML(this.strings.tasks);
 
 		/* Render tasks */
 		for (var task of _state.tasks) {
-			console.log(task.name, task.id, task.categories);
+			const dom = this.getDomTask(task);
+			const domCategories = dom.querySelector('.task-categories');
+
+			for (var category of _state.categories) {
+				const category2 = this.getDomTaskCategory(category, task);
+				domCategories.appendChild(category2);
+			}
+
+			emptyTasks.appendChild(dom);
 		}
 	}
 }
