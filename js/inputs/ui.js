@@ -117,7 +117,7 @@ class UI extends Global {
 			emptyCategories.appendChild(dom);
 		}
 		if (!emptyCategories.childNodes.length) {
-			emptyCategories.innerHTML = '<b>No categories</b>';
+			emptyCategories.innerHTML = '<b>No categories yet, please addsome</b>';
 		}
 
 		/* Clean 'New task' form categories */
@@ -129,8 +129,12 @@ class UI extends Global {
 			emptyTaskFromCategories.appendChild(dom);
 		}
 		if (!emptyTaskFromCategories.childNodes.length) {
-			emptyTaskFromCategories.innerHTML = '<b>No categories</b>';
+			emptyTaskFromCategories.innerHTML = 'No categories';
 		}
 
+		/* Render tasks */
+		for (var task of _state.tasks) {
+			console.log(task.name, task.id, task.categories);
+		}
 	}
 }

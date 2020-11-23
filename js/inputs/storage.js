@@ -100,6 +100,22 @@ class Storage extends Global {
 		return array;
 	}
 
+	/* Processing of loaded item */
+	validateLoadedItem(_key, _state, _classification) {
+		const item = this.storage.getItem(_key);
+		const parsedItem = JSON.parse(item);
+
+		if (parsedItem) {
+			if (typeof parsedItem === 'object' && parsedItem !== null) {
+				for (var parameters of parsedItem) {
+					/* Convert objects to classes */
+					const classed = _classification(parameters);
+					_state.push(classed);
+				}
+			}
+		}
+	}
+
 	/* Return state */
 	get state() {
 		/* Make an empty state */
@@ -107,21 +123,22 @@ class Storage extends Global {
 
 		/* Try to load state */
 		if (this.storage) {
+
 			/* Load categories */
 			const categoriesKey = this.getStorageKey(this.strings.storageCategories);
-			const getResult = this.storage.getItem(categoriesKey);
-			const loadState = JSON.parse(getResult);
+			this.validateLoadedItem(
+				categoriesKey,
+				state.categories,
+				(_parameters) => { return this.getCategory(_parameters); }
+			);
 
-			/* Validation */
-			if (loadState) {
-				if (typeof loadState === 'object' && loadState !== null) {
-					for (var category of loadState) {
-						/* Convert objects to classes */
-						const categoryClass = this.getCategory(category);
-						state.categories.push(categoryClass);
-					}
-				}
-			}
+			/* Load tasks */
+			const tasksKey = this.getStorageKey(this.strings.storageTasks);
+			this.validateLoadedItem(
+				tasksKey,
+				state.tasks,
+				(_parameters) => { return this.getTask(_parameters); }
+			);
 		}
 		return state;
 	}
@@ -136,7 +153,6 @@ class Storage extends Global {
 
 			/* Save tasks */
 			const tasks = this.getSerialisedArray(_state.tasks);
-			console.log(tasks);
 			const tasksKey = this.getStorageKey(this.strings.storageTasks);
 			this.storage.setItem(tasksKey, JSON.stringify(tasks));
 
