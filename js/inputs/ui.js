@@ -15,14 +15,14 @@ class UI extends Global {
 		this.addListener(
 			this.strings.addCategoryForm,
 			'submit',
-			(e) => { this.processCategoryForm(e); }
+			(_e) => { this.processCategoryForm(_e); }
 		);
 
 		/* Listen to 'New task' form submit */
 		this.addListener(
 			this.strings.addTaskForm,
 			'submit',
-			(e) => { this.processTaskForm(e); }
+			(_e) => { this.processTaskForm(_e); }
 		);
 	}
 
@@ -38,36 +38,56 @@ class UI extends Global {
 
 	/* Add cutom event listener tool */
 	addListener(_id, _event, _method) {
-		const element = document.getElementById(_id);
+		var element;
+		if (typeof _id == 'string') {
+			element = document.getElementById(_id);
+		} else {
+			element = _id;
+		}
 		element.addEventListener(_event, _method);
 	}
 
 	/* Process 'New category' form submit */
-	processCategoryForm(e) {
-		e.preventDefault();
+	processCategoryForm(_e) {
+		_e.preventDefault();
 
-		const formData = new FormData(e.target);
+		const formData = new FormData(_e.target);
 		for (var [key, name] of formData.entries()) {
 			this.global.validateCategory(name);
 		}
 
-		e.target.reset();
+		_e.target.reset();
 	}
 
 	/* Process 'New task' form submit */
-	processTaskForm(e) {
-		e.preventDefault();
+	processTaskForm(_e) {
+		_e.preventDefault();
 
-		const formData = new FormData(e.target);
+		const formData = new FormData(_e.target);
 		const formDataObject = {};
 		for (var [key, value] of formData.entries()) {
 			formDataObject[key] = value
 		}
 		this.global.validateTask(formDataObject);
 
-		e.target.reset();
+		_e.target.reset();
 	}
 
+	/* Editing task values */
+	taskValueEdit(_e) {
+		_e.preventDefault();
+		const value = _e.target.innerHTML;
+		const newValue = Number(window.prompt("Enter new value", value));
+		const isNumber = /^\d+$/.test(newValue);
+		if (isNumber) {
+			const newValueString = newValue.toString();
+			const taskID = _e.target.getAttribute(this.strings.taskID);
+			const categoryID = _e.target.getAttribute(this.strings.categoryID);
+			this.global.validateNewTaskValue(newValueString, taskID, categoryID);
+		} else {
+			console.log('Entered value is not a number');
+		}
+	}
 
 	/* ---------------------------------------------------------------------------
 	 * Dom tools
@@ -130,7 +150,6 @@ class UI extends Global {
 	getDomTaskCategory(_category, _task) {
 		const templateId = this.strings.templateTaskCategory;
 		const template = this.getCloneById(templateId);
-		template.setAttribute(this.strings.categoryID, _category.id);
 
 		/* Title */
 		const titleDom = template.querySelector('.' + this.strings.templateTitle);
@@ -138,9 +157,20 @@ class UI extends Global {
 
 		/* Value */
 		const valueDom = template.querySelector('.' + this.strings.templateValue);
+		valueDom.setAttribute(this.strings.taskID, _task.id);
+		valueDom.setAttribute(this.strings.categoryID, _category.id);
 		const taskCategoryValue = _task.categories[_category.id];
 		const value = taskCategoryValue ? taskCategoryValue : 0;
 		valueDom.innerHTML = value;
+
+		/* Reset */
+		this.addListener(
+			valueDom,
+			'click',
+			(_e) => { this.taskValueEdit(_e); }
+		);
+
+
 
 		return template;
 	}
@@ -153,7 +183,7 @@ class UI extends Global {
 		const emptyCategories = this.cleanInnerHTML(this.strings.categories);
 
 		/* Render categories */
-		for (var category of _state.categories) {
+		for (var [key, category] of Object.entries(_state.categories)) {
 			const dom = this.getDomCategory(category, category.id);
 			emptyCategories.appendChild(dom);
 		}
@@ -168,7 +198,7 @@ class UI extends Global {
 		);
 
 		/* Render 'New task' form categories */
-		for (var category of _state.categories) {
+		for (var [key, category] of Object.entries(_state.categories)) {
 			const dom = this.getDomAddTaskCategory(category);
 			emptyTaskFormCategories.appendChild(dom);
 		}
@@ -180,13 +210,13 @@ class UI extends Global {
 		const emptyTasks = this.cleanInnerHTML(this.strings.tasks);
 
 		/* Render tasks */
-		for (var task of _state.tasks) {
+		for (var [key, task] of Object.entries(_state.tasks)) {
 			const dom = this.getDomTask(task);
 			const domCategories = dom.querySelector('.task-categories');
 
-			for (var category of _state.categories) {
-				const category2 = this.getDomTaskCategory(category, task);
-				domCategories.appendChild(category2);
+			for (var [key, category] of Object.entries(_state.categories)) {
+				const domCategory = this.getDomTaskCategory(category, task);
+				domCategories.appendChild(domCategory);
 			}
 
 			emptyTasks.appendChild(dom);

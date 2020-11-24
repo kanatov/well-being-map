@@ -13,7 +13,8 @@ class App extends Global {
 		/* Init UI */
 		const uiGlobal = {
 			validateCategory: (_name) => { this.validateCategory(_name); },
-			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); }
+			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); },
+			validateNewTaskValue: (_newValue, _taskID, _categoryID) => { this.validateNewTaskValue(_newValue, _taskID, _categoryID); }
 		};
 		this.ui = new UI(this.strings, uiGlobal);
 
@@ -63,5 +64,22 @@ class App extends Global {
 		}
 
 		this.storage.addTask(newTask);
+	}
+
+	/* Validate new value */
+	validateNewTaskValue(_newValue, _taskID, _categoryID) {
+		const task = this.storage.state.tasks[_taskID];
+
+		if (task) {
+			const oldValue = task.categories[_categoryID];
+			if (oldValue != _newValue) {
+				task.categories[_categoryID] = _newValue;
+				this.storage.changeTask(task);
+			}
+		} else {
+			console.log('No such task! WEIRD! ID: ' + _taskID);
+		}
+
+
 	}
 }

@@ -21,26 +21,26 @@ class Storage extends Global {
 		return newID;
 	}
 	get emptyState() {
-		const emptyState = {
-			categories: [],
-			tasks: []
+		const empty = {
+			categories: {},
+			tasks: {}
 		};
-		return emptyState;
+		return empty;
 	}
 	get emptyCategory() {
-		const emptyState = {
+		const empty = {
 			id: this.newID,
 			name: ''
 		};
-		return emptyState;
+		return empty;
 	}
 	get emptyTask() {
-		const emptyState = {
+		const empty = {
 			id: this.newID,
 			name: '',
 			categories: {}
 		};
-		return emptyState;
+		return empty;
 	}
 
 	/* ---------------------------------------------------------------------------
@@ -81,6 +81,13 @@ class Storage extends Global {
 	 * Save and Load
 	 */
 
+	/* Save modified task */
+	changeTask(_task) {
+		const newState = this.state; // ⚠️ does it makes sence?
+		newState.tasks[_task.id] = _task;
+		this.state = newState;
+	}
+
 	/* Get storage key */
 	getStorageKey(_request) {
 		const storageName = this.strings.storageName;
@@ -92,7 +99,7 @@ class Storage extends Global {
 	getSerialisedArray(_classesArray) {
 		const array = [];
 
-		for (var classObject of _classesArray) {
+		for (var [key, classObject] of Object.entries(_classesArray)) {
 			const serialisedObject = classObject.getSerialisedObject();
 			array.push(serialisedObject);
 		}
@@ -110,7 +117,7 @@ class Storage extends Global {
 				for (var parameters of parsedItem) {
 					/* Convert objects to classes */
 					const classed = _classification(parameters);
-					_state.push(classed);
+					_state[classed.id] = classed;
 				}
 			}
 		}
