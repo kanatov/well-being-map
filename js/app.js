@@ -15,6 +15,7 @@ class App extends Global {
 			validateCategory: (_name) => { this.validateCategory(_name); },
 			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); },
 			validateNewTaskValue: (_newValue, _taskID, _categoryID) => { this.validateNewTaskValue(_newValue, _taskID, _categoryID); },
+			validateNewTaskTitle: (_taskID, _title) => { this.validateNewTaskTitle(_taskID, _title); },
 			removeCategory: (_categoryID) => { this.removeCategory(_categoryID); },
 			removeTask: (_taskID) => { this.removeTask(_taskID); },
 		};
@@ -70,6 +71,7 @@ class App extends Global {
 
 	/* Validate new value */
 	validateNewTaskValue(_newValue, _taskID, _categoryID) {
+		/* Check if task exist */
 		const task = this.storage.state.tasks[_taskID];
 
 		if (task) {
@@ -77,6 +79,8 @@ class App extends Global {
 			if (oldValue != _newValue) {
 				task.categories[_categoryID] = _newValue;
 				this.storage.changeTask(task);
+			} else {
+				console.log('New value is the same as the old one!');
 			}
 		} else {
 			console.log('No such task! WEIRD! ID: ' + _taskID);
@@ -89,5 +93,23 @@ class App extends Global {
 
 	removeTask(_taskID) {
 		this.storage.removeTask(_taskID);
+	}
+
+	validateNewTaskTitle(_taskID, _title) {
+		/* Check if task exist */
+		const task = this.storage.state.tasks[_taskID];
+
+		if (task && _title) {
+			const newTitle = _title.toLowerCase();
+			if (task.name != newTitle) {
+				task.name = newTitle;
+				this.storage.changeTask(task);
+			} else {
+				console.log('New title is the same as the old one!');
+			}
+		} else {
+			console.log('No such task! WEIRD! ID: ' + _taskID);
+		}
+
 	}
 }
