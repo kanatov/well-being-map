@@ -98,7 +98,14 @@ label {
 .task > .title {
   font-weight: bold;
 }
-.title {
+
+.title,
+label{
+  display: inline-block;
+}
+
+.title:first-letter,
+label:first-letter {
   text-transform: capitalize;
 }
 
@@ -124,11 +131,13 @@ label {
 }
 .add-task-category label {
   display: inline-block;
-  text-transform: capitalize;
   /* width: 3em; */
 }
 .add-task-category input {
   width: 2em;
+}
+.category .remove {
+  padding: 0 .25em;
 }
 .task > .title {
   display: block;
@@ -146,4 +155,10 @@ label {
   padding: .25em 1em;
   background: #fdfdfd;
   border-radius: .5em;
+}
+.task .task-categories {
+  margin-bottom: 1em;
+  border-bottom: 1px solid #91846a;
+  padding: .5em 0;
+
 }

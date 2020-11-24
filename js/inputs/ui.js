@@ -89,11 +89,18 @@ class UI extends Global {
 		}
 	}
 
-	/* Editing task values */
-	categoryRemove(_e) {
+	/* Removing category */
+	removeCategory(_e) {
 		_e.preventDefault();
-		const categoryID = _e.target.getAttribute(this.strings.categoryID);
-		this.global.removeCategory(categoryID);
+		const id = _e.target.getAttribute(this.strings.categoryID);
+		this.global.removeCategory(id);
+	}
+
+	/* Removing task */
+	removeTask(_e) {
+		_e.preventDefault();
+		const id = _e.target.getAttribute(this.strings.taskID);
+		this.global.removeTask(id);
 	}
 
 	/* ---------------------------------------------------------------------------
@@ -193,13 +200,13 @@ class UI extends Global {
 			const dom = this.getDomCategory(category, category.id);
 
 			/* Remove category */
-			const valueDom = dom.querySelector('.' + this.strings.templateRemove);
-			valueDom.setAttribute(this.strings.categoryID, category.id);
+			const remove = dom.querySelector('.' + this.strings.templateRemove);
+			remove.setAttribute(this.strings.categoryID, category.id);
 
 			this.addListener(
-				valueDom,
+				remove,
 				'click',
-				(_e) => { this.categoryRemove(_e); }
+				(_e) => { this.removeCategory(_e); }
 			);
 
 			/* Add dom element to parent */
@@ -241,6 +248,14 @@ class UI extends Global {
 				domCategories.appendChild(domCategory);
 			}
 
+			const remove = dom.querySelector('.' + this.strings.templateRemove);
+			remove.setAttribute(this.strings.taskID, task.id);
+
+			this.addListener(
+				remove,
+				'click',
+				(_e) => { this.removeTask(_e); }
+			);
 			emptyTasks.appendChild(dom);
 		}
 	}

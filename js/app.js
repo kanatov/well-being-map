@@ -86,4 +86,8 @@ class App extends Global {
 	removeCategory(_categoryID) {
 		this.storage.removeCategory(_categoryID);
 	}
+
+	removeTask(_taskID) {
+		this.storage.removeTask(_taskID);
+	}
 }
