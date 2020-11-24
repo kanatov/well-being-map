@@ -6,7 +6,7 @@ class App extends Global {
 
 		/* Init Storage */
 		const storageGlobal = {
-			render: (_state) => { this.ui.render(_state); }
+			render: (_state) => { this.ui.render(_state); },
 		};
 		this.storage = new Storage(this.strings, storageGlobal);
 
@@ -14,7 +14,9 @@ class App extends Global {
 		const uiGlobal = {
 			validateCategory: (_name) => { this.validateCategory(_name); },
 			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); },
-			validateNewTaskValue: (_newValue, _taskID, _categoryID) => { this.validateNewTaskValue(_newValue, _taskID, _categoryID); }
+			validateNewTaskValue: (_newValue, _taskID, _categoryID) => { this.validateNewTaskValue(_newValue, _taskID, _categoryID); },
+			removeCategory: (_categoryID) => { this.removeCategory(_categoryID); },
+			removeTask: (_taskID) => { this.removeTask(_taskID); },
 		};
 		this.ui = new UI(this.strings, uiGlobal);
 
@@ -32,7 +34,7 @@ class App extends Global {
 
 		/* If the name is unique */
 		var unique = true;
-		for (var category of this.storage.state.categories) {
+		for (var [categoryID, category] of Object.entries(this.storage.state.categories)) {
 			if (category.name == name) {
 				unique = false;
 				break;
@@ -79,7 +81,9 @@ class App extends Global {
 		} else {
 			console.log('No such task! WEIRD! ID: ' + _taskID);
 		}
+	}
 
-
+	removeCategory(_categoryID) {
+		this.storage.removeCategory(_categoryID);
 	}
 }

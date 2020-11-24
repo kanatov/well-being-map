@@ -89,6 +89,13 @@ class UI extends Global {
 		}
 	}
 
+	/* Editing task values */
+	categoryRemove(_e) {
+		_e.preventDefault();
+		const categoryID = _e.target.getAttribute(this.strings.categoryID);
+		this.global.removeCategory(categoryID);
+	}
+
 	/* ---------------------------------------------------------------------------
 	 * Dom tools
 	 */
@@ -163,14 +170,12 @@ class UI extends Global {
 		const value = taskCategoryValue ? taskCategoryValue : 0;
 		valueDom.innerHTML = value;
 
-		/* Reset */
+		/* Edit value */
 		this.addListener(
 			valueDom,
 			'click',
 			(_e) => { this.taskValueEdit(_e); }
 		);
-
-
 
 		return template;
 	}
@@ -178,19 +183,34 @@ class UI extends Global {
 	/* ---------------------------------------------------------------------------
 	 * Render
 	 */
-	render(_state) {
+
+	renderCategories(_state) {
 		/* Clean categories */
 		const emptyCategories = this.cleanInnerHTML(this.strings.categories);
 
 		/* Render categories */
 		for (var [key, category] of Object.entries(_state.categories)) {
 			const dom = this.getDomCategory(category, category.id);
+
+			/* Remove category */
+			const valueDom = dom.querySelector('.' + this.strings.templateRemove);
+			valueDom.setAttribute(this.strings.categoryID, category.id);
+
+			this.addListener(
+				valueDom,
+				'click',
+				(_e) => { this.categoryRemove(_e); }
+			);
+
+			/* Add dom element to parent */
 			emptyCategories.appendChild(dom);
 		}
 		if (!emptyCategories.childNodes.length) {
 			emptyCategories.innerHTML = '<h2>No categories yet, please add some.</h2>';
 		}
+	}
 
+	renderNewTaskForm(_state) {
 		/* Clean 'New task' form categories */
 		const emptyTaskFormCategories = this.cleanInnerHTML(
 			this.strings.addTaskForm,
@@ -205,7 +225,9 @@ class UI extends Global {
 		if (!emptyTaskFormCategories.childNodes.length) {
 			emptyTaskFormCategories.innerHTML = 'No categories';
 		}
+	}
 
+	renderTasks(_state) {
 		/* Clean tasks */
 		const emptyTasks = this.cleanInnerHTML(this.strings.tasks);
 
@@ -221,5 +243,11 @@ class UI extends Global {
 
 			emptyTasks.appendChild(dom);
 		}
+	}
+
+	render(_state) {
+		this.renderCategories(_state);
+		this.renderNewTaskForm(_state);
+		this.renderTasks(_state);
 	}
 }

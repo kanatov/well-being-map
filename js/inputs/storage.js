@@ -4,6 +4,9 @@ class Storage extends Global {
 	constructor(_strings, _global) {
 		super(_strings, _global);
 
+		/* Wipe cache */
+		this.wipeCache();
+
 		/* Init storage */
 		this.storage = null;
 		if (Storage) {
@@ -58,7 +61,7 @@ class Storage extends Global {
 
 		/* Update state */
 		const newState = this.state;
-		newState.categories.push(newCategory);
+		newState.categories[newCategory.id] = newCategory;
 		this.state = newState;
 	}
 
@@ -73,13 +76,35 @@ class Storage extends Global {
 
 		/* Update state */
 		const newState = this.state;
-		newState.tasks.push(newTask);
+		newState.tasks[newTask.id] = newTask;
 		this.state = newState;
 	}
 
 	/* ---------------------------------------------------------------------------
 	 * Save and Load
 	 */
+
+	/* Remove category */
+	removeCategory(_categoryID) {
+		/* Delete category from categories */
+		const newState = this.state;
+		delete newState.categories[_categoryID];
+
+		/* Delete category from tasks */
+		for (var [taskID, task] of Object.entries(newState.tasks)) {
+			task.removeCategory(_categoryID);
+		}
+
+		/* Update state */
+		this.state = newState;
+	}
+
+	/* Remove task */
+	removeTask(_taskID) {
+		const newState = this.state;
+		delete newState.tasks[_taskID];
+		this.state = newState;
+	}
 
 	/* Save modified task */
 	changeTask(_task) {
@@ -128,9 +153,10 @@ class Storage extends Global {
 		/* Make an empty state */
 		var state = this.emptyState;
 
-		/* Try to load state */
-		if (this.storage) {
+		if (this.cached) {
+			state = this.cached;
 
+		} else if (this.storage) {
 			/* Load categories */
 			const categoriesKey = this.getStorageKey(this.strings.storageCategories);
 			this.validateLoadedItem(
@@ -147,12 +173,12 @@ class Storage extends Global {
 				(_parameters) => { return this.getTask(_parameters); }
 			);
 		}
+
 		return state;
 	}
 
 	set state(_state) {
 		if (this.storage) {
-
 			/* Save categories */
 			const categories = this.getSerialisedArray(_state.categories);
 			const categoriesKey = this.getStorageKey(this.strings.storageCategories);
@@ -163,8 +189,16 @@ class Storage extends Global {
 			const tasksKey = this.getStorageKey(this.strings.storageTasks);
 			this.storage.setItem(tasksKey, JSON.stringify(tasks));
 
+			/* Reset cache */
+			this.wipeCache();
+
 			/* Refresh page */
 			this.global.render(this.state);
 		}
+	}
+
+	/* Is state should be read from cache or not */
+	wipeCache() {
+		this.cached = null;
 	}
 }
