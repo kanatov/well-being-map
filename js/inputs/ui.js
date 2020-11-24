@@ -78,8 +78,10 @@ class UI extends Global {
 		_e.preventDefault();
 		const title = _e.target.innerHTML;
 		const newTitle = window.prompt("Enter new title", title);
-		const taskID = _e.target.getAttribute(this.strings.taskID);
-		this.global.validateNewTaskTitle(taskID, newTitle);
+		if (newTitle) {
+			const taskID = _e.target.getAttribute(this.strings.taskID);
+			this.global.validateNewTaskTitle(taskID, newTitle);
+		}
 	}
 
 	/* Editing task values */
