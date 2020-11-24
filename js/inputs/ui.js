@@ -73,15 +73,6 @@ class UI extends Global {
 		_e.target.reset();
 	}
 
-	/* Editing task title */
-	editTaskTitle(_e) {
-		_e.preventDefault();
-		const title = _e.target.innerHTML;
-		const newTitle = window.prompt("Enter new title", title);
-		const taskID = _e.target.getAttribute(this.strings.taskID);
-		this.global.validateNewTaskTitle(taskID, newTitle);
-	}
-
 	/* Editing task values */
 	taskValueEdit(_e) {
 		_e.preventDefault();
@@ -141,16 +132,6 @@ class UI extends Global {
 		const titleDom = template.querySelector('.' + this.strings.templateTitle);
 		titleDom.innerHTML = _category.name;
 
-		/* Remove category */
-		const remove = template.querySelector('.' + this.strings.templateRemove);
-		remove.setAttribute(this.strings.categoryID, _category.id);
-
-		this.addListener(
-			remove,
-			'click',
-			(_e) => { this.removeCategory(_e); }
-		);
-
 		return template;
 	}
 
@@ -161,26 +142,6 @@ class UI extends Global {
 		/* Title */
 		const titleDom = template.querySelector('.' + this.strings.templateTitle);
 		titleDom.innerHTML = _task.name;
-
-		/* Edit title */
-		titleDom.setAttribute(this.strings.taskID, _task.id);
-
-		this.addListener(
-			titleDom,
-			'click',
-			(_e) => { this.editTaskTitle(_e); }
-		);
-
-		/* Remove task */
-		const remove = template.querySelector('.' + this.strings.templateRemove);
-		remove.setAttribute(this.strings.taskID, _task.id);
-
-		this.addListener(
-			remove,
-			'click',
-			(_e) => { this.removeTask(_e); }
-		);
-
 		return template;
 	}
 
@@ -238,6 +199,16 @@ class UI extends Global {
 		for (var [key, category] of Object.entries(_state.categories)) {
 			const dom = this.getDomCategory(category, category.id);
 
+			/* Remove category */
+			const remove = dom.querySelector('.' + this.strings.templateRemove);
+			remove.setAttribute(this.strings.categoryID, category.id);
+
+			this.addListener(
+				remove,
+				'click',
+				(_e) => { this.removeCategory(_e); }
+			);
+
 			/* Add dom element to parent */
 			emptyCategories.appendChild(dom);
 		}
@@ -276,6 +247,15 @@ class UI extends Global {
 				const domCategory = this.getDomTaskCategory(category, task);
 				domCategories.appendChild(domCategory);
 			}
+
+			const remove = dom.querySelector('.' + this.strings.templateRemove);
+			remove.setAttribute(this.strings.taskID, task.id);
+
+			this.addListener(
+				remove,
+				'click',
+				(_e) => { this.removeTask(_e); }
+			);
 			emptyTasks.appendChild(dom);
 		}
 	}

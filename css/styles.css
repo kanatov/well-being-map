@@ -90,7 +90,7 @@ label {
 .task {
   display: inline-block;
   background: #dfca9f;
-  padding: 1em;
+  padding: .5em;
   margin-right: .5em;
   border-radius: .5em;
 }
@@ -139,12 +139,6 @@ label:first-letter {
 .category .remove {
   padding: 0 .25em;
 }
-
-.task {
-  float: none;
-  vertical-align: top;
-  max-width: 12em;
-}
 .task > .title {
   display: block;
   margin-bottom: .5em;
@@ -155,14 +149,12 @@ label:first-letter {
 .task-category .title {
   display: inline-block;
   height: 1em;
-  padding: .25em 0;
 }
 .task-category .value {
   display: inline-block;
   padding: .25em 1em;
   background: #fdfdfd;
   border-radius: .5em;
-  float: right;
 }
 .task .task-categories {
   margin-bottom: 1em;
