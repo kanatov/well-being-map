@@ -48,13 +48,41 @@ h3 {
   /* font-weight: bold; */
     color: #676a6f;
     margin: 1em 0 1em;
-    padding-bottom: .5em;
+    /* padding-bottom: .5em; */
     display: block;
-    border-bottom: 1px solid #84939a;
+    /* border-bottom: 1px solid #84939a; */
 }
 h6, address, time {
   display: inline;
 }
+
+#tools {
+  float: right;
+  width: 16em;
+  margin-right: 1em;
+  padding-bottom: 1em;
+}
+#add-category-form,
+#addTask {
+  padding: 1em;
+  background: #d3d4d7;
+  vertical-align: top;
+  border-radius: .5em;
+  width: 100%;
+}
+#add-category-form label {
+  display: block;
+  margin-bottom: .5em;
+}
+#add-category-form .button {
+  float: right;
+}
+
+#add-category-form .input {
+  width: 9em;
+  /* margin-right: 1em; */
+}
+
 
 input {
   background: #fdfdfd;
@@ -108,53 +136,76 @@ label{
 label:first-letter {
   text-transform: capitalize;
 }
-
+#categories-list {
+display: inline-block;
+}
 .section {
-  margin-bottom: 1em;
+  margin-top: 1em;
+  /* padding: 1em 0 2em; */
+  /* border-bottom: 1px solid #84939a; */
 }
 .form {
   border: 1px solid #84939a;
-    border-radius: .5em;
+  border-radius: .5em;
   display: inline-block;
   padding: 1em;
+}
+.button {
+  display: inline-block;
+  margin: 0;
 }
 #addTask .categories {
   margin: .5em 0 1em;
 }
 #new-task-name {
-  width: 30em;
-}
-.add-task-category {
-  /* margin-bottom: .5em; */
-  margin-right: 2em;
-  display: inline-block;
+  width: 100%;
+  box-sizing:border-box;
 }
 .add-task-category label {
-  display: inline-block;
+  display: block;
+  padding: .75em 0;
   /* width: 3em; */
 }
 .add-task-category input {
   width: 2em;
+  float: right;
 }
 .category .remove {
   padding: 0 .25em;
 }
-
+.category .score {
+  display: block;
+  border-top: 1px solid #91846a;
+  margin-top: .5em;
+  padding-top: .5em;
+}
 .task {
   float: none;
   vertical-align: top;
-  max-width: 12em;
+  /* min-width: 9em; */
+  max-width: 13em;
 }
-.task > .title {
+.task > .title,
+#addTask .title {
   display: block;
   margin-bottom: .5em;
+}
+.task .button {
+  float: right;
+  margin: 0;
+}
+.task .remove {
+  display: inline-block;
+  padding: .5em 0;
+  vertical-align: bottom;
+  margin-right: 1em;
 }
 .task-category {
   margin-bottom: .5em;
 }
 .task-category .title {
   display: inline-block;
-  height: 1em;
+  /* height: 1em; */
   padding: .25em 0;
 }
 .task-category .value {
@@ -169,4 +220,7 @@ label:first-letter {
   border-bottom: 1px solid #91846a;
   padding: .5em 0;
 
+}
+#reset {
+  margin-top: 2em;
 }

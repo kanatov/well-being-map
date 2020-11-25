@@ -14,34 +14,40 @@
   <!-- UI -->
   <div id="main">
     <h1>Life balance stats</h1>
+
+    <div id="tools" class="section">
+      <!-- Add category -->
+      <form id="add-category-form">
+        <label for="name" class="title">New category name:</label>
+        <input type="submit" value="Add" class="button">
+        <input type="text" name="name" class="input" required>
+      </form>
+
+      <!-- Add task -->
+      <div id="addTask" class="section">
+        <form id="addTaskForm">
+          <label for="name" class="title">New task name:</label>
+          <input type="text" name="name" id="new-task-name" required >
+          <h3>Reward points</h3>
+          <div class="categories"></div>
+          <input type="submit" value="Add" class="button">
+        </form>
+      </div>
+
+      <!-- Reset -->
+      <input id="reset" type="button" value="Reset all" class="button">
+    </div>
     <!-- Categories -->
-    <h2>Categories</h2>
-    <div id="categories" class="section"></div>
-    <!-- Add category -->
-    <div id="addCategory" class="section form">
-      <form id="addCategoryForm">
-        <label for="name">New category name:</label>
-        <input type="text" name="name" required >
-        <input type="submit" value="Add" class="button">
-      </form>
+    <div id="categories" class="section">
+      <h2>Categories</h2>
+      <div id="categories-list"></div>
     </div>
 
-    <h2>Tasks</h2>
     <!-- Tasks -->
-    <div id="tasks" class="section"></div>
-
-    <!-- Add task -->
-    <div id="addTask" class="section form">
-      <form id="addTaskForm">
-        <label for="name" >New task name:</label>
-        <input type="text" name="name" id="new-task-name" required >
-        <h3>Reward points</h3>
-        <div class="categories"></div>
-        <input type="submit" value="Add" class="button">
-      </form>
+    <div id="tasks" class="section">
+      <h2>Tasks</h2>
+      <div id="tasks-list"></div>
     </div>
-
-    <input id="reset" type="button" value="Reset all" class="button">
   </div>
 
   <!-- Templates -->
@@ -56,6 +62,7 @@
     <div id="template-task" class="task">
       <a class="title" href="#">Title</a>
       <div class="task-categories"></div>
+      <input type="button" value="Use" class="button">
       <a class="remove" href="#">Delete</a>
     </div>
 
@@ -67,8 +74,8 @@
 
     <!-- Task: 'Add task' form category template -->
     <div id="template-add-task-category" class="add-task-category">
-      <label for="name">Category</label>
       <input type="number" name="name" value="0">
+      <label for="name">Category</label>
     </div>
 
   </div>
@@ -103,8 +110,8 @@
         /* Dom Elements */
         /* Root containers */
         main: 'main',
-        categories: 'categories',
-        tasks: 'tasks',
+        categories: 'categories-list',
+        tasks: 'tasks-list',
         reset: 'reset',
 
         /* Attributes */
@@ -112,7 +119,7 @@
         taskID: 'task-id',
 
         /* Add category form */
-        addCategoryForm: 'addCategoryForm',
+        addCategoryForm: 'add-category-form',
 
         /* Add task form */
         addTaskForm: 'addTaskForm',
