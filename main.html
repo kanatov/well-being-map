@@ -11,36 +11,44 @@
 </head>
 <body>
 
-  <!-- UI -->
+<!-- Tools -->
+<div id="tools">
+  <!-- Add category -->
+  <form id="add-category-form">
+    <label for="name" class="title">New category name</label>
+    <input type="submit" value="Add" class="button">
+    <input type="text" name="name" class="input" required>
+  </form>
+
+  <!-- Add task -->
+  <div id="addTask" class="section">
+    <form id="add-task-form">
+      <label for="name" class="title">New task name</label>
+      <input type="text" name="name" id="new-task-name" required >
+      <h3>Reward points</h3>
+      <div class="categories"></div>
+      <input type="submit" value="Add" class="button">
+    </form>
+  </div>
+
+  <!-- Reset -->
+  <input id="reset" type="button" value="Reset all" class="button">
+</div>
+
+<!-- UI -->
   <div id="main">
     <h1>Life balance stats</h1>
 
-    <div id="tools" class="section">
-      <!-- Add category -->
-      <form id="add-category-form">
-        <label for="name" class="title">New category name:</label>
-        <input type="submit" value="Add" class="button">
-        <input type="text" name="name" class="input" required>
-      </form>
-
-      <!-- Add task -->
-      <div id="addTask" class="section">
-        <form id="addTaskForm">
-          <label for="name" class="title">New task name:</label>
-          <input type="text" name="name" id="new-task-name" required >
-          <h3>Reward points</h3>
-          <div class="categories"></div>
-          <input type="submit" value="Add" class="button">
-        </form>
-      </div>
-
-      <!-- Reset -->
-      <input id="reset" type="button" value="Reset all" class="button">
-    </div>
     <!-- Categories -->
     <div id="categories" class="section">
       <h2>Categories</h2>
       <div id="categories-list"></div>
+    </div>
+
+    <!-- Used tasks -->
+    <div id="used-tasks" class="section">
+      <h2>Used tasks</h2>
+      <div id="used-tasks-list"></div>
     </div>
 
     <!-- Tasks -->
@@ -49,6 +57,7 @@
       <div id="tasks-list"></div>
     </div>
   </div>
+
 
   <!-- Templates -->
   <div id="templates">
@@ -61,23 +70,35 @@
     <!-- Task template -->
     <div id="template-task" class="task">
       <a class="title" href="#">Title</a>
-      <div class="task-categories"></div>
-      <input type="button" value="Use" class="button">
+      <div class="categories"></div>
+      <input type="button" value="Include" class="button">
       <a class="remove" href="#">Delete</a>
     </div>
 
-    <!-- Task: category template -->
+    <!-- Task, category template -->
     <div id="template-task-category" class="task-category">
       <span class="title">Category</span>
       <a class="value" href="#">Value</a>
     </div>
 
-    <!-- Task: 'Add task' form category template -->
+    <!-- Task, 'Add task' form, category template -->
     <div id="template-add-task-category" class="add-task-category">
       <input type="number" name="name" value="0">
       <label for="name">Category</label>
     </div>
 
+    <!-- Used task template -->
+    <div id="template-used-task" class="used-task">
+      <span class="title">Task</span>
+      <div class="categories"></div>
+      <a class="remove" href="#">Exclude</a>
+    </div>
+
+    <!-- Used task, category template -->
+    <div id="template-used-task-category" class="used-task-category">
+      <span class="title">Task</span>
+      <span class="value">0</span>
+    </div>
   </div>
 
   <!-- Elements -->
@@ -85,6 +106,7 @@
   <script src="js/elements/name.js"></script>
   <script src="js/elements/category.js"></script>
   <script src="js/elements/task.js"></script>
+  <!-- <script src="js/elements/historyEvent.js"></script> -->
 
   <!-- Inputs -->
   <script src="js/inputs/storage.js"></script>
@@ -102,10 +124,11 @@
     window.onload = (_e) => {
 
       const strings = {
-        /* Storage name */
+        /* Storage names */
         storageName: 'app-storage',
         storageCategories: 'categories',
         storageTasks: 'tasks',
+        storageHistory: 'history',
 
         /* Dom Elements */
         /* Root containers */
@@ -113,26 +136,32 @@
         categories: 'categories-list',
         tasks: 'tasks-list',
         reset: 'reset',
+        usedTasksList: 'used-tasks-list',
 
         /* Attributes */
         categoryID: 'category-id',
         taskID: 'task-id',
+        timestampUTC: 'timestampUTC',
 
         /* Add category form */
         addCategoryForm: 'add-category-form',
 
         /* Add task form */
-        addTaskForm: 'addTaskForm',
+        addTaskForm: 'add-task-form',
         addTaskFormCategories: 'categories',
 
         /* Templates */
         templateAddTaskFormCategory: 'template-add-task-category',
         templateCategory: 'template-category',
+        templateButton: 'button',
         templateTitle: 'title',
         templateValue: 'value',
         templateRemove: 'remove',
         templateTask: 'template-task',
-        templateTaskCategory: 'template-task-category'
+        templateTaskCategories: 'categories',
+        templateTaskCategory: 'template-task-category',
+        templateUsedTaskCategory: 'template-used-task-category',
+        templateUsedTask: 'template-used-task',
       };
 
       /* Init App */

@@ -114,9 +114,17 @@ class UI extends Global {
 		this.global.removeTask(id);
 	}
 
+	/* Using task */
+	useTask(_e) {
+		_e.preventDefault();
+		const id = _e.target.getAttribute(this.strings.taskID);
+		this.global.validateUsedTask(id);
+	}
+
 	/* ---------------------------------------------------------------------------
 	 * Dom tools
 	 */
+
 	cleanInnerHTML(_id, _class) {
 		var dom = document.getElementById(_id);
 		if (_class) {
@@ -183,6 +191,37 @@ class UI extends Global {
 			(_e) => { this.removeTask(_e); }
 		);
 
+		/* Use task */
+		const include = template.querySelector('.' + this.strings.templateButton);
+		include.setAttribute(this.strings.taskID, _task.id);
+
+		this.addListener(
+			include,
+			'click',
+			(_e) => { this.useTask(_e); }
+		);
+
+		return template;
+	}
+
+	getDomUsedTask(_timestampUTC) {
+		const templateId = this.strings.templateUsedTask;
+		const template = this.getCloneById(templateId);
+
+		/* Title */
+		const titleDom = template.querySelector('.' + this.strings.templateTitle);
+		titleDom.innerHTML = _timestampUTC.taskID;
+
+		// /* Remove task */
+		// const remove = template.querySelector('.' + this.strings.templateRemove);
+		// remove.setAttribute(this.strings.taskID, _task.id);
+		//
+		// this.addListener(
+		// 	remove,
+		// 	'click',
+		// 	(_e) => { this.removeTask(_e); }
+		// );
+		//
 		return template;
 	}
 
@@ -202,8 +241,14 @@ class UI extends Global {
 		return template;
 	}
 
-	getDomTaskCategory(_category, _task) {
-		const templateId = this.strings.templateTaskCategory;
+	getDomTaskCategory(_category, _task, _editable) {
+		var templateId;
+
+		if (_editable) {
+			templateId = this.strings.templateTaskCategory;
+		} else {
+			templateId = this.strings.templateUsedTaskCategory;
+		}
 		const template = this.getCloneById(templateId);
 
 		/* Title */
@@ -212,13 +257,23 @@ class UI extends Global {
 
 		/* Value */
 		const valueDom = template.querySelector('.' + this.strings.templateValue);
-		valueDom.setAttribute(this.strings.taskID, _task.id);
-		valueDom.setAttribute(this.strings.categoryID, _category.id);
+		if (_editable) {
+			valueDom.setAttribute(this.strings.taskID, _task.id);
+			valueDom.setAttribute(this.strings.categoryID, _category.id);
+		}
 		const taskCategoryValue = _task.categories[_category.id];
 		const value = taskCategoryValue ? taskCategoryValue : 0;
 		valueDom.innerHTML = value;
 
+		return template;
+	}
+
+	getDomEditableTaskCategory(_category, _task) {
+		const template = this.getDomTaskCategory(_category, _task, true);
+
 		/* Edit value */
+		const valueDom = template.querySelector('.' + this.strings.templateValue);
+
 		this.addListener(
 			valueDom,
 			'click',
@@ -267,24 +322,42 @@ class UI extends Global {
 
 	renderTasks(_state) {
 		/* Clean tasks */
-		const emptyTasks = this.cleanInnerHTML(this.strings.tasks);
+		const emptyList = this.cleanInnerHTML(this.strings.tasks);
 
 		/* Render tasks */
 		for (var [key, task] of Object.entries(_state.tasks)) {
 			const dom = this.getDomTask(task);
-			const domCategories = dom.querySelector('.task-categories');
+			const domCategories = dom.querySelector('.' + this.strings.templateTaskCategories);
 
 			for (var [key, category] of Object.entries(_state.categories)) {
-				const domCategory = this.getDomTaskCategory(category, task);
+				const domCategory = this.getDomEditableTaskCategory(category, task);
 				domCategories.appendChild(domCategory);
 			}
-			emptyTasks.appendChild(dom);
+			emptyList.appendChild(dom);
+		}
+	}
+
+	renderUsedTasks(_state) {
+		/* Clean tasks */
+		const emptyList = this.cleanInnerHTML(this.strings.usedTasksList);
+
+		/* Render tasks */
+		for (var [timestampUTC, event] of Object.entries(_state.historyEvents)) {
+			const dom = this.getDomUsedTask(event);
+			// 	const domCategories = dom.querySelector('.' + this.strings.templateTaskCategories);
+			//
+			// 	for (var [key, category] of Object.entries(_state.categories)) {
+			// 		const domCategory = this.getDomTaskCategory(category, task);
+			// 		domCategories.appendChild(domCategory);
+			// 	}
+			emptyList.appendChild(dom);
 		}
 	}
 
 	render(_state) {
-		this.renderCategories(_state);
 		this.renderNewTaskForm(_state);
+		this.renderCategories(_state);
+		this.renderUsedTasks(_state);
 		this.renderTasks(_state);
 	}
 }

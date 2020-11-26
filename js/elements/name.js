@@ -1,14 +1,14 @@
 'use strict';
 
 class Name {
-	constructor(_strings) {
-		this._id = _strings.id;
-		this.name = _strings.name;
+	constructor(_parameters, _global) {
+		this._id = _parameters.id;
+		this.name = _parameters.name;
 	}
 	get id() {
 		return this._id;
 	}
-	getSerialisedObject() {
+	get serialisedObject() {
 		const object = {
 			id: this.id,
 			name: this.name

@@ -18,15 +18,24 @@ class Storage extends Global {
 	 * Empty templates
 	 */
 
+	get timestamp() {
+		const now = new Date();
+		const timestamp = {
+			utc: now.getTime(),
+			timezoneOffset: now.getTimezoneOffset()
+		}
+		return timestamp;
+	}
 	/* Generate empty state */
 	get newID() {
-		const newID = (new Date()).getTime();
+		const newID = this.timestamp.utc;
 		return newID;
 	}
 	get emptyState() {
 		const empty = {
 			categories: {},
-			tasks: {}
+			tasks: {},
+			historyEvents: {}
 		};
 		return empty;
 	}
@@ -41,7 +50,8 @@ class Storage extends Global {
 		const empty = {
 			id: this.newID,
 			name: '',
-			categories: {}
+			categories: {},
+			historyEvents: {},
 		};
 		return empty;
 	}
@@ -67,6 +77,7 @@ class Storage extends Global {
 
 	/* Create task class using parameters */
 	getTask(_parameters) {
+		// TODO: compare parameters with empty
 		return new Task(_parameters);
 	}
 
@@ -80,8 +91,17 @@ class Storage extends Global {
 		this.state = newState;
 	}
 
+	/* Add new history event */
+	addHistoryEvent(_taskID) {
+		const newState = this.state;
+		newState.tasks[_taskID].use();
+		this.state = newState;
+	}
+
+
+
 	/* ---------------------------------------------------------------------------
-	 * Save and Load
+	 * Change state
 	 */
 
 	/* Remove category */
@@ -106,12 +126,23 @@ class Storage extends Global {
 		this.state = newState;
 	}
 
+	/* Use task */
+	useTask(_taskID) {
+		// const newState = this.state;
+		// newState.tasks[_taskID];
+	}
+
 	/* Save modified task */
 	changeTask(_task) {
 		const newState = this.state; // ⚠️ does it makes sence?
 		newState.tasks[_task.id] = _task;
 		this.state = newState;
 	}
+
+
+	/* ---------------------------------------------------------------------------
+	 * Save and Load
+	 */
 
 	/* Get storage key */
 	getStorageKey(_request) {
@@ -125,7 +156,7 @@ class Storage extends Global {
 		const array = [];
 
 		for (var [key, classObject] of Object.entries(_classesArray)) {
-			const serialisedObject = classObject.getSerialisedObject();
+			const serialisedObject = classObject.serialisedObject;
 			array.push(serialisedObject);
 		}
 
@@ -172,9 +203,20 @@ class Storage extends Global {
 				state.tasks,
 				(_parameters) => { return this.getTask(_parameters); }
 			);
-		}
 
-		return state;
+			/* Make history events list */
+			for (var [key, task] of Object.entries(state.tasks)) {
+				for (var [timestampUTC, timezoneOffset] of Object.entries(task.historyEvents)) {
+					state.historyEvents[timestampUTC] = {
+						timestampUTC: timestampUTC,
+						timezoneOffset: timezoneOffset,
+						taskID: task.id
+					};
+				}
+			}
+
+			return state;
+		}
 	}
 
 	set state(_state) {

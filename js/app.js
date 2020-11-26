@@ -18,6 +18,7 @@ class App extends Global {
 			validateNewTaskTitle: (_taskID, _title) => { this.validateNewTaskTitle(_taskID, _title); },
 			removeCategory: (_categoryID) => { this.removeCategory(_categoryID); },
 			removeTask: (_taskID) => { this.removeTask(_taskID); },
+			validateUsedTask: (_taskID) => { this.validateUsedTask(_taskID); },
 		};
 		this.ui = new UI(this.strings, uiGlobal);
 
@@ -110,6 +111,11 @@ class App extends Global {
 		} else {
 			console.log('No such task! WEIRD! ID: ' + _taskID);
 		}
-
 	}
+
+	validateUsedTask(_taskID) {
+		this.storage.addHistoryEvent(_taskID);
+	}
+
+
 }

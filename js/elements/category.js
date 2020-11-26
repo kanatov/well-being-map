@@ -5,8 +5,8 @@ class Category extends Name {
 		super(_strings);
 	}
 
-	getSerialisedObject() {
-		const objectSuper = super.getSerialisedObject();
+	get serialisedObject() {
+		const objectSuper = super.serialisedObject;
 		const objectThis = {};
 
 		let object = {

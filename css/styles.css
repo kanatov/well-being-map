@@ -40,9 +40,10 @@ h1 {
   margin: .5em 0 .5em;
 }
 h2 {
-  margin: .5em 0 .5em;
+  margin: 1em 0 .5em;
   color: #676a6f;
-  font-weight: bold;
+  /* font-weight: bold; */
+  font-size: 1.5em;
 }
 h3 {
   /* font-weight: bold; */
@@ -55,21 +56,36 @@ h3 {
 h6, address, time {
   display: inline;
 }
+#main {
+  padding: 2em;
+  margin-right: 20em;
+}
+
+#templates {
+  display: none;
+}
 
 #tools {
   float: right;
-  width: 16em;
+  width: 18em;
   margin-right: 1em;
+  margin-top: 5em;
   padding-bottom: 1em;
 }
 #add-category-form,
-#addTask {
+#add-task-form {
+  box-sizing: border-box;
   padding: 1em;
   background: #d3d4d7;
   vertical-align: top;
   border-radius: .5em;
   width: 100%;
 }
+#add-category-form .title,
+#add-task-form .title {
+  font-weight: bold;
+}
+
 #add-category-form label {
   display: block;
   margin-bottom: .5em;
@@ -103,15 +119,8 @@ label {
   box-shadow: 0 5px 10px rgba(103, 106, 111, 0.3);
 }
 
-#main {
-  padding: 2em;
-}
 #categories {
     margin-top: .5em;
-}
-
-#templates {
-  display: none;
 }
 
 .category,
@@ -157,6 +166,9 @@ display: inline-block;
 #addTask .categories {
   margin: .5em 0 1em;
 }
+#addTask .title {
+
+}
 #new-task-name {
   width: 100%;
   box-sizing:border-box;
@@ -190,6 +202,11 @@ display: inline-block;
   display: block;
   margin-bottom: .5em;
 }
+.task .categories {
+  margin-bottom: 1em;
+  border-bottom: 1px solid #91846a;
+  padding: .5em 0;
+}
 .task .button {
   float: right;
   margin: 0;
@@ -203,23 +220,34 @@ display: inline-block;
 .task-category {
   margin-bottom: .5em;
 }
-.task-category .title {
+.task .task-category .title {
   display: inline-block;
   /* height: 1em; */
   padding: .25em 0;
 }
-.task-category .value {
+.task .task-category .value {
   display: inline-block;
   padding: .25em 1em;
   background: #fdfdfd;
   border-radius: .5em;
   float: right;
 }
-.task .task-categories {
+.used-task {
+  border-bottom: 1px solid #84939a;
   margin-bottom: 1em;
-  border-bottom: 1px solid #91846a;
-  padding: .5em 0;
-
+  padding-bottom: 1em;
+  /* width: 20em; */
+}
+.used-task > .title {
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+.used-task .categories {
+  margin-bottom: .5em;
+}
+.used-task-category {
+  display: inline-block;
+  margin-right: 1em;
 }
 #reset {
   margin-top: 2em;
