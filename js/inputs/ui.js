@@ -118,6 +118,7 @@ class UI extends Global {
 	removeHistoryEvent(_e) {
 		_e.preventDefault();
 		const id = _e.target.getAttribute(this.strings.timestampUTC);
+		console.log(id);
 		this.global.removeHistoryEvent(id);
 	}
 
@@ -272,6 +273,10 @@ class UI extends Global {
 		const value = taskCategoryValue ? taskCategoryValue : 0;
 		valueDom.innerHTML = value;
 
+		if (!value && !_editable) {
+			template.classList.add('zero');
+		}
+
 		return template;
 	}
 
@@ -352,12 +357,12 @@ class UI extends Global {
 		for (var [timestampUTC, event] of Object.entries(_state.historyEvents)) {
 			const task = _state.tasks[event.taskID];
 			const dom = this.getDomUsedTask(event.timestampUTC, task);
-			// 	const domCategories = dom.querySelector('.' + this.strings.templateTaskCategories);
-			//
-			// 	for (var [key, category] of Object.entries(_state.categories)) {
-			// 		const domCategory = this.getDomTaskCategory(category, task);
-			// 		domCategories.appendChild(domCategory);
-			// 	}
+			const domCategories = dom.querySelector('.' + this.strings.templateTaskCategories);
+
+			for (var [key, category] of Object.entries(_state.categories)) {
+				const domCategory = this.getDomTaskCategory(category, task);
+				domCategories.appendChild(domCategory);
+			}
 			emptyList.appendChild(dom);
 		}
 	}

@@ -59,6 +59,7 @@ h6, address, time {
 #main {
   padding: 2em;
   margin-right: 20em;
+  min-width: 16em;
 }
 
 #templates {
@@ -232,16 +233,22 @@ display: inline-block;
   background: #fdfdfd;
   border-radius: .5em;
   float: right;
+  margin-left: .5em;
 }
 .used-task {
-  border-bottom: 1px solid #84939a;
+  /* border-bottom: 1px solid #d3d4d7; */
   margin-bottom: 1em;
   padding-bottom: 1em;
   /* width: 20em; */
 }
-.used-task > .title {
+.used-task > .content > .title {
   font-weight: bold;
   margin-bottom: .5em;
+}
+.used-task .remove {
+  padding: .5em 1em;
+  /* margin-top: -.5em; */
+  float: left;
 }
 .used-task .categories {
   margin-bottom: .5em;
@@ -249,6 +256,9 @@ display: inline-block;
 .used-task-category {
   display: inline-block;
   margin-right: 1em;
+}
+.zero{
+  color: #AFB1B4;
 }
 #reset {
   margin-top: 2em;

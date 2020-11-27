@@ -188,6 +188,15 @@ class Storage extends Global {
 		}
 	}
 
+	/* Sort object keys */
+	sortObject(_object) {
+		const sortedObject = {};
+		Object.keys(_object).sort().forEach(function (key) {
+			sortedObject[key] = _object[key];
+		});
+		return sortedObject;
+	}
+
 	/* Return state */
 	get state() {
 		/* Make an empty state */
@@ -223,6 +232,7 @@ class Storage extends Global {
 					};
 				}
 			}
+			state.historyEvents = this.sortObject(state.historyEvents);
 			console.log('State: ', state);
 			return state;
 		}
