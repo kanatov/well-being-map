@@ -139,6 +139,15 @@ class Storage extends Global {
 		this.state = newState;
 	}
 
+	/* Remove task */
+	removeHistoryEvent(_timestampUTC) {
+		const newState = this.state;
+		const taskID = newState.historyEvents[_timestampUTC].taskID;
+		delete newState.tasks[taskID].historyEvents[_timestampUTC];
+		this.state = newState;
+	}
+
+
 
 	/* ---------------------------------------------------------------------------
 	 * Save and Load
@@ -214,7 +223,7 @@ class Storage extends Global {
 					};
 				}
 			}
-
+			console.log('State: ', state);
 			return state;
 		}
 	}

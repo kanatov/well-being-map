@@ -16,9 +16,10 @@ class App extends Global {
 			validateTask: (_formDataObject) => { this.validateTask(_formDataObject); },
 			validateNewTaskValue: (_newValue, _taskID, _categoryID) => { this.validateNewTaskValue(_newValue, _taskID, _categoryID); },
 			validateNewTaskTitle: (_taskID, _title) => { this.validateNewTaskTitle(_taskID, _title); },
+			validateUsedTask: (_taskID) => { this.validateUsedTask(_taskID); },
 			removeCategory: (_categoryID) => { this.removeCategory(_categoryID); },
 			removeTask: (_taskID) => { this.removeTask(_taskID); },
-			validateUsedTask: (_taskID) => { this.validateUsedTask(_taskID); },
+			removeHistoryEvent: (_timestampUTC) => { this.removeHistoryEvent(_timestampUTC); },
 		};
 		this.ui = new UI(this.strings, uiGlobal);
 
@@ -29,6 +30,7 @@ class App extends Global {
 	/* ---------------------------------------------------------------------------
 	 * Validation tools
 	 */
+
 	/* Validate new category */
 	validateCategory(_name) {
 		/* Format the string */
@@ -88,14 +90,6 @@ class App extends Global {
 		}
 	}
 
-	removeCategory(_categoryID) {
-		this.storage.removeCategory(_categoryID);
-	}
-
-	removeTask(_taskID) {
-		this.storage.removeTask(_taskID);
-	}
-
 	validateNewTaskTitle(_taskID, _title) {
 		/* Check if task exist */
 		const task = this.storage.state.tasks[_taskID];
@@ -117,5 +111,19 @@ class App extends Global {
 		this.storage.addHistoryEvent(_taskID);
 	}
 
+	/* ---------------------------------------------------------------------------
+	 * Remove
+	 */
 
+	removeCategory(_categoryID) {
+		this.storage.removeCategory(_categoryID);
+	}
+
+	removeTask(_taskID) {
+		this.storage.removeTask(_taskID);
+	}
+
+	removeHistoryEvent(_timestampUTC) {
+		this.storage.removeHistoryEvent(_timestampUTC);
+	}
 }

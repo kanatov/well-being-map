@@ -114,6 +114,13 @@ class UI extends Global {
 		this.global.removeTask(id);
 	}
 
+	/* Removing task */
+	removeHistoryEvent(_e) {
+		_e.preventDefault();
+		const id = _e.target.getAttribute(this.strings.timestampUTC);
+		this.global.removeHistoryEvent(id);
+	}
+
 	/* Using task */
 	useTask(_e) {
 		_e.preventDefault();
@@ -204,24 +211,24 @@ class UI extends Global {
 		return template;
 	}
 
-	getDomUsedTask(_timestampUTC) {
+	getDomUsedTask(_timestampUTC, _task) {
 		const templateId = this.strings.templateUsedTask;
 		const template = this.getCloneById(templateId);
 
 		/* Title */
 		const titleDom = template.querySelector('.' + this.strings.templateTitle);
-		titleDom.innerHTML = _timestampUTC.taskID;
+		titleDom.innerHTML = _task.name;
 
-		// /* Remove task */
-		// const remove = template.querySelector('.' + this.strings.templateRemove);
-		// remove.setAttribute(this.strings.taskID, _task.id);
-		//
-		// this.addListener(
-		// 	remove,
-		// 	'click',
-		// 	(_e) => { this.removeTask(_e); }
-		// );
-		//
+		/* Remove task */
+		const remove = template.querySelector('.' + this.strings.templateRemove);
+		remove.setAttribute(this.strings.timestampUTC, _timestampUTC);
+
+		this.addListener(
+			remove,
+			'click',
+			(_e) => { this.removeHistoryEvent(_e); }
+		);
+
 		return template;
 	}
 
@@ -343,7 +350,8 @@ class UI extends Global {
 
 		/* Render tasks */
 		for (var [timestampUTC, event] of Object.entries(_state.historyEvents)) {
-			const dom = this.getDomUsedTask(event);
+			const task = _state.tasks[event.taskID];
+			const dom = this.getDomUsedTask(event.timestampUTC, task);
 			// 	const domCategories = dom.querySelector('.' + this.strings.templateTaskCategories);
 			//
 			// 	for (var [key, category] of Object.entries(_state.categories)) {

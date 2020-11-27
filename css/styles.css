@@ -129,6 +129,7 @@ label {
   background: #dfca9f;
   padding: 1em;
   margin-right: .5em;
+  margin-bottom: .5em;
   border-radius: .5em;
 }
 .category > .title,
